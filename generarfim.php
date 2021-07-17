@@ -11,14 +11,14 @@
   }
   function llenar0(&$matriz){
     for ($i=0;$i<15;$i++){
-      for ($j=0;$j<6;$j++){
+      for ($j=0;$j<7;$j++){
         $matriz[$i][$j]=0;
       }
     }
   }
   function aumentar(&$matriz,$nuevo){
     for ($i=0;$i<15;$i++){
-      for ($j=0;$j<6;$j++){
+      for ($j=0;$j<7;$j++){
           $matriz[$i][$j]=$matriz[$i][$j] + $nuevo[$i][$j];
           if($matriz[$i][$j]>1)
             return false;
@@ -87,28 +87,31 @@
     llenar0($matriz);
     $horas_cruce = 0;
     $color = 0;
+    $domingo = 0;
     for ($sel=0;$sel < count($secciones);$sel++){
       $nuevo = $cursos[$sel][$secciones[$sel]];
       for ($i=0;$i<15;$i++){
-        for ($j=0;$j<6;$j++){
-            if($nuevo[$i][$j]>0){
-              //$matriz[$i][$j]=$matriz[$i][$j]+$sel+1;
-              if ($matriz[$i][$j] != 0)
-              {
-                $n_curso = explode(".", $matriz[$i][$j]);
-                
-                $matriz[$i][$j] = "1.".$n_curso[1]."<br>".$nombre[$sel].' - '.$curso_secciones[$sel][$secciones[$sel]].'<br>'.$matriz_aulas[$sel][$secciones[$sel]][$i][$j];
-                
-                $horas_cruce++;
-              }
-              else
-              {
-                $matriz[$i][$j]=($sel+2).".".$nombre[$sel].' - '.$curso_secciones[$sel][$secciones[$sel]].'<br>'.$matriz_aulas[$sel][$secciones[$sel]][$i][$j];
-              }
-            } else {
-              if ($sel==0)
-                $matriz[$i][$j]=0;
+        for ($j=0;$j<7;$j++){
+          if($nuevo[$i][$j]>0){
+            if ($j == 6)
+              $domingo = 1;
+            //$matriz[$i][$j]=$matriz[$i][$j]+$sel+1;
+            if ($matriz[$i][$j] != 0)
+            {
+              $n_curso = explode(".", $matriz[$i][$j]);
+              
+              $matriz[$i][$j] = "1.".$n_curso[1]."<br>".$nombre[$sel].' - '.$curso_secciones[$sel][$secciones[$sel]].'<br>'.$matriz_aulas[$sel][$secciones[$sel]][$i][$j];
+              
+              $horas_cruce++;
             }
+            else
+            {
+              $matriz[$i][$j]=($sel+2).".".$nombre[$sel].' - '.$curso_secciones[$sel][$secciones[$sel]].'<br>'.$matriz_aulas[$sel][$secciones[$sel]][$i][$j];
+            }
+          } else {
+            if ($sel==0)
+              $matriz[$i][$j]=0;
+          }
         }
       }
     }
@@ -133,19 +136,32 @@
     }
     //echo "1: ".$secciones[0]." 2: ".$secciones[1]." 3: ".$secciones[2]."<br>";//imprimir tablas
     
+    if ($domingo) {
     ?></ul><table class="paleBlueRows" style="width:100%; font-size: 12px; text-align: center" border="1"><tr>
-          <th bgcolor="#D1CCF4" width="30" height="50">Horas</th>
-          <th bgcolor="#D1CCF4" width="50">Lunes</th>
-          <th bgcolor="#D1CCF4" width="50">Martes</th>
-          <th bgcolor="#D1CCF4" width="50">Miercoles</th>
-          <th bgcolor="#D1CCF4" width="50">Jueves</th>
-          <th bgcolor="#D1CCF4" width="50" >Viernes</th>
-          <th bgcolor="#D1CCF4" width="50">Sábado</th>
+          <th bgcolor="#D1CCF4" style="width:4%" height="50">Horas</th>
+          <th bgcolor="#D1CCF4" style="width:14%">Lunes</th>
+          <th bgcolor="#D1CCF4" style="width:14%">Martes</th>
+          <th bgcolor="#D1CCF4" style="width:14%">Miercoles</th>
+          <th bgcolor="#D1CCF4" style="width:14%">Jueves</th>
+          <th bgcolor="#D1CCF4" style="width:14%">Viernes</th>
+          <th bgcolor="#D1CCF4" style="width:13%">Sábado</th>
+          <th bgcolor="#D1CCF4" style="width:13%">Domingo</th>
     <?php
+    } else {
+    ?></ul><table class="paleBlueRows" style="width:100%; font-size: 12px; text-align: center" border="1"><tr>
+          <th bgcolor="#D1CCF4" style="width:4%" height="50">Horas</th>
+          <th bgcolor="#D1CCF4" style="width:16%">Lunes</th>
+          <th bgcolor="#D1CCF4" style="width:16%">Martes</th>
+          <th bgcolor="#D1CCF4" style="width:16%">Miercoles</th>
+          <th bgcolor="#D1CCF4" style="width:16%">Jueves</th>
+          <th bgcolor="#D1CCF4" style="width:16%">Viernes</th>
+          <th bgcolor="#D1CCF4" style="width:16%">Sábado</th>
+    <?php
+    }
     
     for ($i=0;$i<15;$i++){
-      echo "<tr height='35px'><th>".($i+7)."-".($i+8)."</th>";
-      for ($j=0;$j<6;$j++){
+      echo "<tr height='35px'><th>".str_pad($i+7, 2, '0', STR_PAD_LEFT)."-".str_pad($i+8, 2, '0', STR_PAD_LEFT)."</th>";
+      for ($j=0;$j<(6+$domingo);$j++){
           if ($matriz[$i][$j]!=0)
           {
             $n_curso = explode(".", $matriz[$i][$j]);
@@ -176,7 +192,7 @@
           return false;*/
 	      
         for ($l=0; $l < $GLOBALS['num_cursos']; $l++) {
-          for ($j=0;$j<6;$j++) {
+          for ($j=0;$j<7;$j++) {
             $makecruce = 0;
             for ($i=0;$i<15;$i++) {
               
@@ -304,6 +320,8 @@
             $dia = 4;
         }elseif ($cadena[$i]=="S"&&$cadena[$i+1]=="A") {
             $dia = 5;
+        }elseif ($cadena[$i]=="D"&&$cadena[$i+1]=="O") {
+            $dia = 6;
         }elseif ($cadena[$i]=="("&&$cadena[$i+2]==")") {
             $dia = -1;
             $i+=1;
@@ -380,7 +398,7 @@
   if (isset($_POST['reset']))
   {
     //unset($ses->selected);
-    header("Location: generadorfim.php");
+    header("Location: index.php");
     die();
   }
   
@@ -389,7 +407,7 @@
   
   if(!isset($ses->selected))
   {
-      header("Location: generadorfim.php");
+      header("Location: index.php");
       die();
   }
   
@@ -399,24 +417,16 @@
   if($elegidos == "") {
       return 0;
   }
-    
 ?>
 <?php require($tree.'header.php'); //<body><div> ?>
 
-  <?php require($tree.'sidebar.php'); ?>
-
   <div class="content-wrapper">
-    <section class="content-header">
-      <h1>
-        <?php echo $title; ?>
-      </h1>
-    </section>
     
     <section class="content container-fluid">
     
     <div class="row">
         
-        <div class="col-md-6">
+        <div class="col-md-12">
           <div class="box box-success box-solid">
             <div class="box-header with-border">
               <h3 class="box-title">Cursos y secciones</h3>
@@ -433,7 +443,7 @@
     
   for ($i=0; $i<$GLOBALS['num_cursos']; $i++){
     //cursos
-    $sql = "SELECT seccion, nombre, horario, aulas, profes, creds FROM cursosfim where codigo = \"".$elegidos[$i]."\"";
+    $sql = "SELECT seccion, cursos.nombre, horario, aulas, profes, creds FROM cursosfim LEFT JOIN cursos ON cursosfim.codigo = cursos.codigo where cursosfim.codigo = \"".$elegidos[$i]."\"";
     //echo $sql."<br>";
     $conn->query($sql);
 

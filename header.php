@@ -41,11 +41,4 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>
 
-<body class="hold-transition skin-green-light sidebar-mini" style="min-width:1000px; _width: expression( document.body.clientWidth > 700 ? 700px : auto ); overflow-x:scroll;">
-<div class="wrapper">
-
-  <header class="main-header" name="top">
-    <div class="logo">
-      <span class="logo-lg"><b>Horarios 2.0</b></span>
-    </div>
-  </header>
+<body class="hold-transition skin-green-light sidebar-collapse" style="min-width:1000px; _width: expression( document.body.clientWidth > 700 ? 700px : auto ); overflow-x:scroll;">
